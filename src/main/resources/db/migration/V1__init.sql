@@ -70,3 +70,42 @@ INSERT INTO ourusers_actions (user_id, action_id) VALUES
 
 	(4, 2); -- user2	TALK
 
+--CREATE TABLE rules
+--(
+--	id				serial PRIMARY KEY,
+--	role_id			int NOT NULL,
+--	action_id	int NOT NULL,
+--	FOREIGN KEY (role_id)		REFERENCES roles (id),
+--	FOREIGN KEY (action_id)	REFERENCES actions (id)
+--);
+--INSERT INTO rules (role_id, action_id) VALUES
+--	(1, 1),	--  1  ROLE_GUEST	WALK
+--	(2, 1),	--  2  ROLE_USER	WALK
+--	(2, 2),	--  3  ROLE_USER	TALK
+--	(3, 1),	--  4  ROLE_ADMIN	WALK
+--	(3, 2),	--  5  ROLE_ADMIN	TALK
+--	(3, 3),	--  6  ROLE_ADMIN	EAT
+--	(4, 1),	--  7  ROLE_SUPERADMIN	WALK
+--	(4, 2),	--  8  ROLE_SUPERADMIN	TALK
+--	(4, 3),	--  9  ROLE_SUPERADMIN	EAT
+--	(4, 4);	-- 10  ROLE_SUPERADMIN	SLEEP
+
+--CREATE TABLE ourusers_rules
+--(
+--	user_id		bigint NOT NULL,
+--	rule_id	int NOT NULL,
+--	PRIMARY KEY (user_id, rule_id),
+--	FOREIGN KEY (user_id)	REFERENCES ourusers (id),
+--	FOREIGN KEY (rule_id)	REFERENCES rules (id)
+--);
+--INSERT INTO ourusers_rules (user_id, rule_id) VALUES
+--	(1,  2), -- user1	rule2	:	ROLE_USER	WALK
+--	(2,  3), -- user2	rule3	:	ROLE_USER	TALK
+--
+--	(3,  4), -- admin	rule4	:	ROLE_ADMIN	WALK
+--	(3,  6), -- admin	rule6	:	ROLE_ADMIN	EAT
+--
+--	(4,  7), -- super	rule7	:	ROLE_SUPERADMIN	WALK
+--	(4,  8), -- super	rule8	:	ROLE_SUPERADMIN	TALK
+--	(4,  9), -- super	rule9	:	ROLE_SUPERADMIN	EAT
+--	(4, 10); -- super	rule10	:	ROLE_SUPERADMIN	SLEEP

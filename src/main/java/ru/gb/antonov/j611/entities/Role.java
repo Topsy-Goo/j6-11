@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -20,4 +21,10 @@ public class Role
     @Length (min=6, max=64, message="Длина названия — 6…64 латин.символов.\r")
     @Column (name="name", nullable=false, unique=true)
     private String name;
+
+/*    @ManyToMany
+    @JoinTable (name="ourusers_roles",
+                joinColumns        = @JoinColumn (name="role_id"),
+                inverseJoinColumns = @JoinColumn (name="user_id"))
+    private Collection<OurUser> ourUser;*/
 }

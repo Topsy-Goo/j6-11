@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -21,4 +22,9 @@ public class Action
     @Column(name="name", nullable=false, unique=true)
     private String name;
 
+/*    @ManyToMany
+    @JoinTable (name="ourusers_actions",
+                joinColumns        = @JoinColumn (name="action_id"),
+                inverseJoinColumns = @JoinColumn (name="user_id"))
+    private Collection<OurUser> ourUsers;*/
 }
