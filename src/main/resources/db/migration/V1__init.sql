@@ -1,9 +1,10 @@
 CREATE TABLE ourusers
 (
-	id			bigserial PRIMARY KEY,
+	id			bigserial,
 	login		VARCHAR(32) NOT NULL UNIQUE,
 	password	VARCHAR(64) NOT NULL,
-	email		VARCHAR(64) NOT NULL UNIQUE
+	email		VARCHAR(64) NOT NULL UNIQUE,
+	PRIMARY KEY (id)
 );
 INSERT INTO ourusers (login, password, email) VALUES
 	('super',	'$2a$12$c4HYjryn7vo1bYQfSzkUDe8jPhYIpInbUKZmv5lGnmcyrQPLIWnVu',	'super@post.ru'),	-- пароль 100
@@ -13,25 +14,26 @@ INSERT INTO ourusers (login, password, email) VALUES
 
 CREATE TABLE roles
 (
-	id		serial PRIMARY KEY,
-	name	VARCHAR(64) NOT NULL UNIQUE
+	id		serial,
+	name	VARCHAR(64) NOT NULL UNIQUE,
+	PRIMARY KEY (id)
 );
 INSERT INTO roles (name) VALUES
-	('ROLE_SUPERADMIN'), -- 1 только для суперадминов
-	('ROLE_ADMIN'),		 -- 2 только для админов и суперадминов
-	('ROLE_USER');		 -- 4 для НЕавторизованных юзеров
+	('ROLE_SUPERADMIN'), -- 1
+	('ROLE_ADMIN'),		 -- 2
+	('ROLE_USER');		 -- 4
 
 CREATE TABLE actions
 (
-	id		serial PRIMARY KEY,
-	name	VARCHAR(64) NOT NULL UNIQUE
+	id		serial,
+	name	VARCHAR(64) NOT NULL UNIQUE,
+	PRIMARY KEY (id)
 );
 INSERT INTO actions (name) VALUES
 	('WALK'),	-- 1
 	('TALK'),	-- 2
 	('EAT'),	-- 3
 	('SLEEP');	-- 4
-
 
 CREATE TABLE ourusers_roles
 (
@@ -69,43 +71,3 @@ INSERT INTO ourusers_actions (user_id, action_id) VALUES
 	(3, 3), -- user1	EAT		- постороннему юзеру выдан пропуск в офисную столовку
 
 	(4, 2); -- user2	TALK
-
---CREATE TABLE rules
---(
---	id				serial PRIMARY KEY,
---	role_id			int NOT NULL,
---	action_id	int NOT NULL,
---	FOREIGN KEY (role_id)		REFERENCES roles (id),
---	FOREIGN KEY (action_id)	REFERENCES actions (id)
---);
---INSERT INTO rules (role_id, action_id) VALUES
---	(1, 1),	--  1  ROLE_GUEST	WALK
---	(2, 1),	--  2  ROLE_USER	WALK
---	(2, 2),	--  3  ROLE_USER	TALK
---	(3, 1),	--  4  ROLE_ADMIN	WALK
---	(3, 2),	--  5  ROLE_ADMIN	TALK
---	(3, 3),	--  6  ROLE_ADMIN	EAT
---	(4, 1),	--  7  ROLE_SUPERADMIN	WALK
---	(4, 2),	--  8  ROLE_SUPERADMIN	TALK
---	(4, 3),	--  9  ROLE_SUPERADMIN	EAT
---	(4, 4);	-- 10  ROLE_SUPERADMIN	SLEEP
-
---CREATE TABLE ourusers_rules
---(
---	user_id		bigint NOT NULL,
---	rule_id	int NOT NULL,
---	PRIMARY KEY (user_id, rule_id),
---	FOREIGN KEY (user_id)	REFERENCES ourusers (id),
---	FOREIGN KEY (rule_id)	REFERENCES rules (id)
---);
---INSERT INTO ourusers_rules (user_id, rule_id) VALUES
---	(1,  2), -- user1	rule2	:	ROLE_USER	WALK
---	(2,  3), -- user2	rule3	:	ROLE_USER	TALK
---
---	(3,  4), -- admin	rule4	:	ROLE_ADMIN	WALK
---	(3,  6), -- admin	rule6	:	ROLE_ADMIN	EAT
---
---	(4,  7), -- super	rule7	:	ROLE_SUPERADMIN	WALK
---	(4,  8), -- super	rule8	:	ROLE_SUPERADMIN	TALK
---	(4,  9), -- super	rule9	:	ROLE_SUPERADMIN	EAT
---	(4, 10); -- super	rule10	:	ROLE_SUPERADMIN	SLEEP

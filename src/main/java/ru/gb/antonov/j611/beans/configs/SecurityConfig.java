@@ -3,6 +3,7 @@ package ru.gb.antonov.j611.beans.configs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,12 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.gb.antonov.j611.beans.services.OurUserService;
 
-@EnableWebSecurity  //< «в(ы)ключатель» правил безопасности в проекте
+//@Configuration  < методичка рекомендует, но всё работает и без этой анн-ии
+@EnableWebSecurity  //< «включатель» правил безопасности, описанных в нижеописанном классе
 @RequiredArgsConstructor
 @Slf4j  //< логгирование
-@EnableGlobalMethodSecurity(prePostEnabled = true,  //< разрешает использование @PreAuthorize и @PostAuthorize
-                            securedEnabled = true,  //< разрешает использование @Secured
-                            jsr250Enabled = true)   //< разрешает использование @RoleAllowed
+@EnableGlobalMethodSecurity //< включает защиту на уровне методов
+    (prePostEnabled = true,  //< (не)разрешает исп-ние @PreAuthorize и @PostAuthorize
+     securedEnabled = true,  //< (не)разрешает исп-ние @Secured
+     jsr250Enabled = true)   //< (не)разрешает исп-ние @Role(s)Allowed
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
     private final OurUserService ourUserService;
@@ -46,8 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                .antMatchers("/office").hasAnyRole("ADMIN", "SUPERADMIN")
                .antMatchers("/office/diningroom").hasAuthority("EAT")
                .antMatchers("/office/controlroom").hasAuthority("SLEEP")
-               //.anyRequest().permitAll()    //< все остальные запросы доступны всем включая гостей
-               // …Но мы не пойдём этим путём, чтобы не пустить гостей в служебную область, для которой забыли выставить права доступа. «Звёздочки» (вида /somearea/**) тоже под запретом по той же причине.
+               //.anyRequest().permitAll()    < все остальные запросы доступны всем включая гостей
+               // …Но мы не пойдём этим путём, чтобы не пустить гостей в области, для которых забыли выставить права доступа. «Звёздочки» (вида /somearea/**) тоже под запретом по той же причине.
                // Явно указываем права доступа для общих областей.
                .antMatchers("/cafe").permitAll()
     //создание формы авторизации при авторизации:
@@ -69,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     public BCryptPasswordEncoder passwordEncoder()  {   return new BCryptPasswordEncoder();   }
     //NoOpPasswordEncoder (Deprecated) не кодирует пароль.
 
-    @Bean
+    @Bean   //Это стандартный DAO-бин для
     public DaoAuthenticationProvider daoAuthenticationProvider()
     {
         DaoAuthenticationProvider dap = new DaoAuthenticationProvider();

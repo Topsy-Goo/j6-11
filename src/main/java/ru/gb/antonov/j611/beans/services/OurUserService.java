@@ -25,6 +25,11 @@ public class OurUserService implements UserDetailsService
     private final OurUsersRepo ourUsersRepo;
 
 
+    public Optional<OurUser> findByLogin (String login)
+    {
+        return ourUsersRepo.findByLogin (login);
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername (String login) throws UsernameNotFoundException
@@ -34,7 +39,9 @@ public class OurUserService implements UserDetailsService
                                                             //^ отправляем err.401 клиенту
 /*  Ниже я изменил тип
 с   Collection<? extends GrantedAuthority>
-на  Collection<          GrantedAuthority>, т.к. IDE не давала склеивать коллекции gaRoles и gaActions. Можно было бы создать общую коллекцию прямо в OurUser, но я оставил этот вариант, т.к. не определил, какой из вариантов лучше (правильнее?).
+на  Collection<          GrantedAuthority>, т.к. IDE не давала склеивать коллекции gaRoles и gaActions.
+Можно было бы создать общую коллекцию прямо в OurUser, но я оставил этот вариант, т.к. не определил,
+какой из вариантов лучше (правильнее?).
 */
         Collection<GrantedAuthority> gaRoles = mapRolesToAuthorities (ourUser.getRoles());
         Collection<GrantedAuthority> gaActions = mapActionsToAuthorities (ourUser.getActions());
@@ -44,11 +51,6 @@ public class OurUserService implements UserDetailsService
         return new User(ourUser.getLogin(),
                         ourUser.getPassword(),
                         gaRoles);
-    }
-
-    public Optional<OurUser> findByLogin (String login)
-    {
-        return ourUsersRepo.findByLogin (login);
     }
 
     private Collection<GrantedAuthority> mapRolesToAuthorities (Collection<Role> roles)
